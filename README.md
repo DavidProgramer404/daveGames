@@ -278,6 +278,43 @@ python manage.py makemigrations --empty games
 python manage.py migrate --fake-initial
 ```
 
+## 🚀 Despliegue en la Nube
+
+### Vercel (Recomendado)
+```bash
+# Configurar proyecto
+python deploy_vercel.py
+
+# O manualmente
+npm i -g vercel
+vercel
+```
+
+### Heroku
+```bash
+# Crear app
+heroku create davegames-app
+git push heroku main
+heroku run python manage.py migrate
+```
+
+### Railway
+```bash
+# Desplegar
+railway login
+railway init
+railway up
+```
+
+### Netlify (Solo frontend)
+```bash
+# Para sitios estáticos únicamente
+python manage.py collectstatic
+# Subir carpeta staticfiles/
+```
+
+Ver `DEPLOYMENT_GUIDE.md` para guías detalladas de cada plataforma.
+
 ## 📈 Roadmap
 
 - [ ] Sistema de usuarios y autenticación

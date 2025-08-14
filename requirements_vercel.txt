@@ -1,0 +1,24 @@
+# DaveGames - Dependencias para Vercel
+
+# Framework principal
+Django==4.2.23
+
+# Base de datos
+dj-database-url==2.1.0
+psycopg2-binary==2.9.9
+
+# Archivos estáticos
+whitenoise==6.6.0
+
+# Manejo de imágenes
+Pillow==10.4.0
+
+# Dependencias de Django
+asgiref==3.8.1
+sqlparse==0.5.3
+tzdata==2025.2
+typing_extensions==4.13.2
+backports.zoneinfo==0.2.1
+
+# Variables de entorno
+python-decouple==3.8
