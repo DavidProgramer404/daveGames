@@ -1,0 +1,356 @@
+{% extends 'games/base.html' %}
+
+{% block title %}{{ game.title }} - DaveGames{% endblock %}
+
+{% block content %}
+<!-- Game Header -->
+<section class="py-5" style="background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.7));">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'home' %}" class="text-primary">
+                        <i class="fas fa-home me-1"></i>Inicio
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{% url 'category_games' game.category.id %}" class="text-primary">
+                        {{ game.category.name }}
+                    </a>
+                </li>
+                <li class="breadcrumb-item active text-secondary">{{ game.title }}</li>
+            </ol>
+        </nav>
+        
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="game-cover position-relative">
+                    {% if game.cover_image %}
+                        <img src="{{ game.cover_image.url }}" alt="{{ game.title }}" 
+                             class="img-fluid rounded-3 shadow-lg"
+                             style="width: 100%; max-height: 500px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-secondary d-flex align-items-center justify-content-center rounded-3" 
+                             style="height: 400px;">
+                            <i class="fas fa-gamepad fa-5x text-primary"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Play Trailer Button -->
+                    {% if game.trailer_url %}
+                    <div class="position-absolute top-50 start-50 translate-middle">
+                        <button class="btn btn-gamer btn-lg" onclick="playTrailer('{{ game.trailer_url }}')">
+                            <i class="fas fa-play fa-2x"></i>
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="game-info ps-lg-4">
+                    <div class="mb-3">
+                        <span class="badge bg-primary fs-6 me-2">{{ game.category.name }}</span>
+                        <span class="badge bg-success fs-6">Disponible</span>
+                    </div>
+                    
+                    <h1 class="display-4 mb-4" style="font-family: 'Orbitron', monospace; color: var(--primary-color);">
+                        {{ game.title }}
+                    </h1>
+                    
+                    <div class="game-meta mb-4">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="meta-item mb-3">
+                                    <i class="fas fa-calendar text-primary me-2"></i>
+                                    <span class="text-secondary">Fecha de Lanzamiento</span>
+                                    <div class="text-white">{{ game.release_date }}</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="meta-item mb-3">
+                                    <i class="fas fa-tag text-primary me-2"></i>
+                                    <span class="text-secondary">Categoría</span>
+                                    <div class="text-white">{{ game.category.name }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons d-grid gap-2 d-md-flex">
+                        <a href="{{ game.download_link }}" target="_blank" class="btn btn-gamer btn-lg flex-fill">
+                            <i class="fas fa-download me-2"></i>Descargar Juego
+                        </a>
+                        {% if game.trailer_url %}
+                        <button class="btn btn-secondary-gamer btn-lg" onclick="playTrailer('{{ game.trailer_url }}')">
+                            <i class="fas fa-play me-2"></i>Ver Trailer
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Game Description -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="game-description">
+                    <h2 class="mb-4" style="color: var(--primary-color);">
+                        <i class="fas fa-info-circle me-2"></i>Descripción
+                    </h2>
+                    <div class="description-content p-4 rounded-3" 
+                         style="background: var(--card-bg); border: 1px solid rgba(0, 255, 136, 0.2);">
+                        <p class="text-secondary lead">{{ game.description|linebreaks }}</p>
+                    </div>
+                </div>
+                
+                <!-- System Requirements -->
+                {% if game.min_requirements or game.max_requirements %}
+                <div class="system-requirements mt-5">
+                    <h2 class="mb-4" style="color: var(--accent-color);">
+                        <i class="fas fa-desktop me-2"></i>Requisitos del Sistema
+                    </h2>
+                    
+                    <div class="row">
+                        {% if game.min_requirements %}
+                        <div class="col-md-6 mb-4">
+                            <div class="requirements-card p-4 rounded-3 h-100" 
+                                 style="background: var(--card-bg); border: 1px solid rgba(0, 255, 136, 0.2);">
+                                <h5 class="text-primary mb-3">
+                                    <i class="fas fa-microchip me-2"></i>Requisitos Mínimos
+                                </h5>
+                                <div class="text-secondary">{{ game.min_requirements|linebreaks }}</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if game.max_requirements %}
+                        <div class="col-md-6 mb-4">
+                            <div class="requirements-card p-4 rounded-3 h-100" 
+                                 style="background: var(--card-bg); border: 1px solid rgba(255, 0, 128, 0.2);">
+                                <h5 class="text-secondary-gamer mb-3">
+                                    <i class="fas fa-rocket me-2"></i>Requisitos Recomendados
+                                </h5>
+                                <div class="text-secondary">{{ game.max_requirements|linebreaks }}</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="game-sidebar">
+                    <!-- Download Card -->
+                    <div class="download-card p-4 rounded-3 mb-4" 
+                         style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1)); 
+                                border: 1px solid var(--primary-color);">
+                        <h5 class="text-primary mb-3">
+                            <i class="fas fa-download me-2"></i>Descarga Directa
+                        </h5>
+                        <p class="text-secondary mb-3">
+                            Descarga {{ game.title }} de forma gratuita y segura.
+                        </p>
+                        <a href="{{ game.download_link }}" target="_blank" class="btn btn-gamer w-100">
+                            <i class="fas fa-download me-2"></i>Descargar Ahora
+                        </a>
+                    </div>
+                    
+                    <!-- Game Info Card -->
+                    <div class="info-card p-4 rounded-3 mb-4" 
+                         style="background: var(--card-bg); border: 1px solid rgba(0, 212, 255, 0.2);">
+                        <h5 class="text-accent mb-3">
+                            <i class="fas fa-info me-2"></i>Información del Juego
+                        </h5>
+                        <div class="info-list">
+                            <div class="info-item d-flex justify-content-between mb-2">
+                                <span class="text-secondary">Título:</span>
+                                <span class="text-white">{{ game.title }}</span>
+                            </div>
+                            <div class="info-item d-flex justify-content-between mb-2">
+                                <span class="text-secondary">Categoría:</span>
+                                <span class="text-primary">{{ game.category.name }}</span>
+                            </div>
+                            <div class="info-item d-flex justify-content-between mb-2">
+                                <span class="text-secondary">Lanzamiento:</span>
+                                <span class="text-white">{{ game.release_date|date:"d/m/Y" }}</span>
+                            </div>
+                            <div class="info-item d-flex justify-content-between">
+                                <span class="text-secondary">Estado:</span>
+                                <span class="badge bg-success">Disponible</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Share Card -->
+                    <div class="share-card p-4 rounded-3" 
+                         style="background: var(--card-bg); border: 1px solid rgba(255, 0, 128, 0.2);">
+                        <h5 class="text-secondary-gamer mb-3">
+                            <i class="fas fa-share me-2"></i>Compartir
+                        </h5>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-primary btn-sm flex-fill" onclick="shareGame('twitter')">
+                                <i class="fab fa-twitter"></i>
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm flex-fill" onclick="shareGame('facebook')">
+                                <i class="fab fa-facebook"></i>
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm flex-fill" onclick="shareGame('discord')">
+                                <i class="fab fa-discord"></i>
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm flex-fill" onclick="copyLink()">
+                                <i class="fas fa-link"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Games -->
+<section class="py-5" style="background: rgba(0, 0, 0, 0.2);">
+    <div class="container">
+        <h3 class="text-center mb-5" style="color: var(--primary-color);">
+            <i class="fas fa-gamepad me-2"></i>Juegos Relacionados
+        </h3>
+        <div class="row">
+            <!-- Aquí puedes agregar lógica para mostrar juegos relacionados -->
+            <div class="col-12 text-center py-4">
+                <p class="text-secondary">Próximamente mostraremos juegos similares</p>
+                <a href="{% url 'category_games' game.category.id %}" class="btn btn-gamer">
+                    <i class="fas fa-th-large me-2"></i>Ver más de {{ game.category.name }}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trailer Modal -->
+<div class="modal fade" id="trailerModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-primary">Trailer - {{ game.title }}</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div id="trailerContainer" class="ratio ratio-16x9">
+                    <!-- El trailer se cargará aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .text-secondary-gamer {
+        color: var(--secondary-color) !important;
+    }
+    
+    .text-accent {
+        color: var(--accent-color) !important;
+    }
+    
+    .game-cover img {
+        transition: transform 0.3s ease;
+    }
+    
+    .game-cover:hover img {
+        transform: scale(1.02);
+    }
+    
+    .requirements-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .breadcrumb {
+        background: none;
+        padding: 0;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+        color: var(--primary-color);
+    }
+</style>
+
+<script>
+function playTrailer(url) {
+    const modal = new bootstrap.Modal(document.getElementById('trailerModal'));
+    const container = document.getElementById('trailerContainer');
+    
+    // Detectar si es YouTube
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+        const videoId = url.includes('youtu.be') ? 
+            url.split('/').pop() : 
+            url.split('v=')[1].split('&')[0];
+        
+        container.innerHTML = `
+            <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
+                    frameborder="0" allowfullscreen></iframe>
+        `;
+    } else {
+        container.innerHTML = `
+            <video controls autoplay class="w-100 h-100">
+                <source src="${url}" type="video/mp4">
+                Tu navegador no soporta el elemento video.
+            </video>
+        `;
+    }
+    
+    modal.show();
+}
+
+function shareGame(platform) {
+    const url = window.location.href;
+    const title = '{{ game.title }} - DaveGames';
+    
+    let shareUrl = '';
+    
+    switch(platform) {
+        case 'twitter':
+            shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+            break;
+        case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+            break;
+        case 'discord':
+            // Discord no tiene URL directa, copiamos al portapapeles
+            copyLink();
+            return;
+    }
+    
+    if (shareUrl) {
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+    }
+}
+
+function copyLink() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+        // Mostrar notificación
+        const toast = document.createElement('div');
+        toast.className = 'position-fixed top-0 end-0 m-3 alert alert-success';
+        toast.innerHTML = '<i class="fas fa-check me-2"></i>¡Enlace copiado al portapapeles!';
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    });
+}
+
+// Limpiar el modal cuando se cierre
+document.getElementById('trailerModal').addEventListener('hidden.bs.modal', function () {
+    document.getElementById('trailerContainer').innerHTML = '';
+});
+</script>
+{% endblock %}

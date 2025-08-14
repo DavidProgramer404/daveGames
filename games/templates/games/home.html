@@ -1,0 +1,202 @@
+{% extends 'games/base.html' %}
+
+{% block title %}DaveGames - Portal de Juegos{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="hero-title mb-4">
+                    DAVE<span style="color: var(--secondary-color);">GAMES</span>
+                </h1>
+                <p class="lead text-secondary mb-4" style="font-size: 1.3rem;">
+                    Descubre los mejores juegos, desde indies hasta AAA. 
+                    Tu próxima aventura te está esperando.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="#featured-games" class="btn btn-gamer">
+                        <i class="fas fa-play me-2"></i>Explorar Juegos
+                    </a>
+                    <a href="#categories" class="btn btn-secondary-gamer">
+                        <i class="fas fa-th-large me-2"></i>Ver Categorías
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image" style="position: relative;">
+                    <i class="fas fa-gamepad" style="font-size: 15rem; color: var(--primary-color); opacity: 0.3; animation: float 3s ease-in-out infinite;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5" style="background: rgba(0, 0, 0, 0.3);">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="stat-item">
+                    <h2 class="display-4 text-primary mb-2">{{ games.count }}+</h2>
+                    <p class="text-secondary">Juegos Disponibles</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="stat-item">
+                    <h2 class="display-4 text-primary mb-2">{{ categories.count }}+</h2>
+                    <p class="text-secondary">Categorías</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="stat-item">
+                    <h2 class="display-4 text-primary mb-2">24/7</h2>
+                    <p class="text-secondary">Disponibilidad</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Games -->
+<section id="featured-games" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 mb-3" style="font-family: 'Orbitron', monospace; color: var(--primary-color);">
+                <i class="fas fa-star me-3"></i>Juegos Destacados
+            </h2>
+            <p class="lead text-secondary">Los últimos y mejores juegos agregados a nuestra colección</p>
+        </div>
+        
+        <div class="row">
+            {% for game in games %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="game-card h-100">
+                    <div class="position-relative overflow-hidden">
+                        {% if game.cover_image %}
+                            <img src="{{ game.cover_image.url }}" class="card-img-top" alt="{{ game.title }}" 
+                                 style="height: 250px; object-fit: cover; transition: transform 0.3s ease;">
+                        {% else %}
+                            <div class="bg-secondary d-flex align-items-center justify-content-center" 
+                                 style="height: 250px;">
+                                <i class="fas fa-gamepad fa-4x text-primary"></i>
+                            </div>
+                        {% endif %}
+                        <div class="position-absolute top-0 end-0 m-3">
+                            <span class="badge bg-primary">{{ game.category.name }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body p-4">
+                        <h5 class="card-title text-primary mb-3">{{ game.title }}</h5>
+                        <p class="card-text text-secondary mb-3">
+                            {{ game.description|truncatewords:20 }}
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>{{ game.release_date }}
+                            </small>
+                            <a href="{% url 'game_detail' game.id %}" class="btn btn-gamer btn-sm">
+                                <i class="fas fa-eye me-1"></i>Ver Detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-gamepad fa-4x text-secondary mb-3"></i>
+                <h4 class="text-secondary">No hay juegos disponibles</h4>
+                <p class="text-muted">¡Pronto agregaremos contenido increíble!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section id="categories" class="py-5" style="background: rgba(0, 0, 0, 0.2);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 mb-3" style="font-family: 'Orbitron', monospace; color: var(--accent-color);">
+                <i class="fas fa-th-large me-3"></i>Categorías
+            </h2>
+            <p class="lead text-secondary">Explora juegos por género y encuentra tu estilo favorito</p>
+        </div>
+        
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="category-card text-center p-4" 
+                     style="background: var(--card-bg); border-radius: 15px; border: 1px solid rgba(0, 212, 255, 0.2); transition: all 0.3s ease;">
+                    <div class="category-icon mb-3">
+                        <i class="fas fa-gamepad fa-3x text-accent"></i>
+                    </div>
+                    <h5 class="text-primary mb-2">{{ category.name }}</h5>
+                    <p class="text-secondary small mb-3">
+                        {{ category.description|default:"Descubre increíbles juegos de esta categoría" }}
+                    </p>
+                    <a href="{% url 'category_games' category.id %}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-arrow-right me-1"></i>Explorar
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-th-large fa-4x text-secondary mb-3"></i>
+                <h4 class="text-secondary">No hay categorías disponibles</h4>
+                <p class="text-muted">Las categorías se mostrarán aquí cuando estén disponibles.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="cta-box p-5" 
+                     style="background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 212, 255, 0.1)); 
+                            border-radius: 20px; border: 1px solid var(--primary-color);">
+                    <h3 class="mb-4" style="font-family: 'Orbitron', monospace;">
+                        ¿Eres Administrador?
+                    </h3>
+                    <p class="lead text-secondary mb-4">
+                        Accede al panel de administración para gestionar juegos y categorías
+                    </p>
+                    <a href="/admin/" class="btn btn-secondary-gamer">
+                        <i class="fas fa-cog me-2"></i>Panel de Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    .game-card:hover img {
+        transform: scale(1.1);
+    }
+    
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        border-color: var(--accent-color);
+    }
+    
+    .stat-item h2 {
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
+{% endblock %}

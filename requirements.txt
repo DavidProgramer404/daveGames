@@ -1,0 +1,36 @@
+# DaveGames - Portal de Juegos
+# Archivo de dependencias para el proyecto Django
+
+# Framework principal
+Django==4.2.23
+
+# Base de datos PostgreSQL
+psycopg2-binary==2.9.9
+
+# Manejo de imágenes
+Pillow==10.4.0
+
+# Dependencias de Django
+asgiref==3.8.1
+sqlparse==0.5.3
+tzdata==2025.2
+
+# Compatibilidad con Python
+typing_extensions==4.13.2
+backports.zoneinfo==0.2.1
+
+# Dependencias adicionales recomendadas para producción (opcional)
+# gunicorn==21.2.0  # Servidor WSGI para producción
+# whitenoise==6.6.0  # Servir archivos estáticos en producción
+# python-decouple==3.8  # Manejo de variables de entorno
+# django-cors-headers==4.3.1  # CORS para APIs
+
+# Dependencias para SSL en desarrollo (opcional)
+# django-extensions==3.2.3  # Extensiones Django incluyendo runserver_plus
+# Werkzeug==2.3.7  # Servidor de desarrollo con SSL
+# pyOpenSSL==23.3.0  # Soporte SSL para Python
+
+# Dependencias para despliegue en la nube (opcional)
+# boto3==1.34.0  # AWS SDK
+# django-storages==1.14.2  # Almacenamiento en la nube
+# google-cloud-storage==2.10.0  # Google Cloud Storage
