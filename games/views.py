@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Game, Category
 
 # Create your views here.
@@ -24,10 +24,25 @@ def category_games(request, category_id):
     })
 
 # definir juego detalle
+from .forms import CommentForm
+from .models import Comment
+
 def game_detail(request, game_id):
     game = get_object_or_404(Game, id=game_id)
     categories = Category.objects.all()
+    comments = game.comments.order_by('-created_at')
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.game = game
+            comment.save()
+            return redirect('game_detail', game_id=game.id)
+    else:
+        form = CommentForm()
     return render(request, 'games/game_detail.html', {
         'game': game,
-        'categories': categories
+        'categories': categories,
+        'comments': comments,
+        'form': form,
     })

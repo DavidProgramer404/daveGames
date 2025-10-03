@@ -1,13 +1,12 @@
 {
   "version": 2,
-  "name": "davegames",
   "builds": [
     {
       "src": "davegames_project/wsgi.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
-        "runtime": "python3.9"
+        "runtime": "python3.8"
       }
     },
     {
@@ -34,16 +33,6 @@
   ],
   "env": {
     "DJANGO_SETTINGS_MODULE": "davegames_project.settings",
-    "PYTHONPATH": ".",
-    "DATABASE_URL": "@database_url",
-    "SECRET_KEY": "@secret_key",
-    "DEBUG": "False"
-  },
-  "functions": {
-    "davegames_project/wsgi.py": {
-      "includeFiles": "**"
-    }
-  },
-  "regions": ["iad1"],
-  "framework": null
+    "PYTHONPATH": "."
+  }
 }

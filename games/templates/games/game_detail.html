@@ -1,4 +1,5 @@
 {% extends 'games/base.html' %}
+{% load form_tags %}
 
 {% block title %}{{ game.title }} - DaveGames{% endblock %}
 
@@ -249,6 +250,64 @@
         </div>
     </div>
 </div>
+
+<!-- Sección de Comentarios (justo antes del footer) -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="rounded-4 p-4 mb-5" style="background: linear-gradient(135deg, #181a1b 0%, #232526 100%); border: 1px solid var(--primary-color); box-shadow: 0 8px 32px rgba(0,0,0,0.4);">
+                    <h3 class="mb-4 text-accent text-center"><i class="fas fa-comments me-2"></i>Comentarios de usuarios</h3>
+                    <div class="comments-list mb-4">
+                        {% for comment in comments %}
+                        <div class="card mb-3 border-0 shadow-sm" style="background: rgba(0,0,0,0.7);">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-user-circle fa-lg text-primary me-2"></i>
+                                    <h6 class="mb-0 text-primary">{{ comment.nickname }}</h6>
+                                    <small class="ms-auto text-secondary">{{ comment.created_at|date:"d M Y H:i" }}</small>
+                                </div>
+                                <p class="mt-2 text-light">{{ comment.text }}</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-secondary text-center">Sé el primero en comentar este juego.</p>
+                        {% endfor %}
+                    </div>
+                    <div class="card border-0 shadow-lg" style="background: linear-gradient(135deg, #232526 0%, #414345 100%);">
+                        <div class="card-body">
+                            <h5 class="mb-3 text-primary text-center"><i class="fas fa-comment-dots me-2"></i>Deja tu comentario</h5>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="nickname" class="form-label text-white">Nickname</label>
+                                        {{ form.nickname|add_class:'form-control bg-dark text-light border-primary' }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="email" class="form-label text-white">Email</label>
+                                        {{ form.email|add_class:'form-control bg-dark text-light border-primary' }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="password" class="form-label text-white">Contraseña</label>
+                                        {{ form.password|add_class:'form-control bg-dark text-light border-primary' }}
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="text" class="form-label text-white">Comentario</label>
+                                        {{ form.text|add_class:'form-control bg-dark text-light border-primary' }}
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-gamer mt-4 px-5">Enviar comentario</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <style>
     .text-secondary-gamer {

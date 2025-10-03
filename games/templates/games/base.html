@@ -11,7 +11,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <!-- agregar icon del navegador link -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     <style>
         :root {
             --primary-color: #00ff88;
@@ -258,6 +262,19 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        .dropdown-menu .dropdown-item {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: #fff !important;
+            background: transparent;
+        }
+        .dropdown-menu .dropdown-item:hover, 
+        .dropdown-menu .dropdown-item:focus {
+            background: var(--gradient-primary);
+            color: #0a0a0a !important;
+            text-shadow: none;
+        }
     </style>
 </head>
 <body>
@@ -283,9 +300,15 @@
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fas fa-th-large me-1"></i>Categorías
                         </a>
-                        <ul class="dropdown-menu bg-dark">
+                        <ul class="dropdown-menu bg-dark border-0 shadow-lg">
                             {% for category in categories %}
-                            <li><a class="dropdown-item text-light" href="{% url 'category_games' category.id %}">{{ category.name }}</a></li>
+                            <li>
+                                <a class="dropdown-item text-light px-4 py-2" 
+                                   href="{% url 'category_games' category.id %}" 
+                                   style="transition: background 0.2s, color 0.2s;">
+                                    {{ category.name }}
+                                </a>
+                            </li>
                             {% endfor %}
                         </ul>
                     </li>

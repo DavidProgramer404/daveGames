@@ -26,6 +26,18 @@ class Game(models.Model):
     download_link = models.URLField()
     release_date = models.DateField()
 
-    # definición str
     def __str__(self):
         return self.title
+
+
+# Modelo para comentarios de usuarios en juegos
+class Comment(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='comments')
+    nickname = models.CharField(max_length=50)
+    email = models.EmailField()
+    password = models.CharField(max_length=128)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.nickname} - {self.game.title}"
